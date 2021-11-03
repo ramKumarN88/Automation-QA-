@@ -1,3 +1,4 @@
+
 import urllib.request
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -24,7 +25,7 @@ driver.find_element_by_name("q").send_keys(Keys.ENTER)
 
 ### Advanced Search opearation and scrolling the page to the exact field location ###
 ActionChains(driver).move_to_element(driver.find_element_by_link_text("Advanced search")).perform()
-time.sleep(6)
+time.sleep(4)
 driver.find_element_by_link_text("Advanced search").click()
 
 
@@ -52,11 +53,11 @@ driver.find_element_by_xpath("//button[@type='submit']").click()
 ### try except block --- To track the location of 1 respository ###
 try:
     # l= driver.getPageSource().contains("1 repository result")
-    l= driver.find_element_by_link_text("h3").text
-    # print(l)
-    # s= l.text
-    print("Element exist -" + l)
+    l= driver.find_element_by_xpath("//div[@class='d-flex flex-column flex-md-row flex-justify-between border-bottom pb-3 position-relative']")
+    s= l.get_attribute('innerHTML')
+    print("Element exist -" + s.strip())
     time.sleep(3)
+
 #NoSuchElementException thrown if not present
 except NoSuchElementException:
     print("Element does not exist")
@@ -67,6 +68,7 @@ try:
     s= l.text
     print("Element exist -" + s)
     time.sleep(3)
+
 #NoSuchElementException thrown if not present
 except NoSuchElementException:
     print("Element does not exist")
