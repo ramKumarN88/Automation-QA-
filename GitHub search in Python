@@ -1,0 +1,94 @@
+import urllib.request
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.devtools.v95 import browser
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+import time
+from selenium.webdriver.common.keys import Keys
+import selenium.webdriver.chrome
+
+driver = webdriver.Chrome(executable_path="C:\\Users\\raamt\\Desktop\\Desktop Items\\Chromedriver\\chromedriver.exe")
+
+### maximize the window size ###
+driver.maximize_window()
+
+### navigate to the url ###
+driver.get("https://www.github.com/")
+
+### identify the Github search text box and enter the text for search ###
+driver.find_element_by_name("q").send_keys("react")
+driver.find_element_by_name("q").send_keys(Keys.ENTER)
+
+### Advanced Search opearation and scrolling the page to the exact field location ###
+ActionChains(driver).move_to_element(driver.find_element_by_link_text("Advanced search")).perform()
+time.sleep(6)
+driver.find_element_by_link_text("Advanced search").click()
+
+
+### Selecting the Parameters for performing search operation ###
+time.sleep(4)
+ActionChains(driver).move_to_element(driver.find_element_by_id("search_language")).perform()
+driver.find_element_by_id("search_language").send_keys("JavaScript")
+
+time.sleep(4)
+ActionChains(driver).move_to_element(driver.find_element_by_id("search_stars")).perform()
+driver.find_element_by_id("search_stars").send_keys(">45")
+
+time.sleep(4)
+ActionChains(driver).move_to_element(driver.find_element_by_id("search_followers")).perform()
+driver.find_element_by_id("search_followers").send_keys(">50")
+
+time.sleep(4)
+ActionChains(driver).move_to_element(driver.find_element_by_id("search_license")).perform()
+driver.find_element_by_id("search_license").send_keys("Boost Software License 1.0")
+
+time.sleep(4)
+ActionChains(driver).move_to_element(driver.find_element_by_xpath("//button[@type='submit']")).perform()
+driver.find_element_by_xpath("//button[@type='submit']").click()
+
+### try except block --- To track the location of 1 respository ###
+try:
+    # l= driver.getPageSource().contains("1 repository result")
+    l= driver.find_element_by_link_text("h3").text
+    # print(l)
+    # s= l.text
+    print("Element exist -" + l)
+    time.sleep(3)
+#NoSuchElementException thrown if not present
+except NoSuchElementException:
+    print("Element does not exist")
+
+### try except block --- To track the location ###
+try:
+    l= driver.find_element_by_link_text("mvoloskov/decider")
+    s= l.text
+    print("Element exist -" + s)
+    time.sleep(3)
+#NoSuchElementException thrown if not present
+except NoSuchElementException:
+    print("Element does not exist")
+
+### Navigate to "mvoloskov/decider" repository ###
+ActionChains(driver).move_to_element(driver.find_element_by_link_text("mvoloskov/decider")).perform()
+time.sleep(4)
+driver.find_element_by_link_text("mvoloskov/decider").click()
+
+### Navigate to README.md ###
+ActionChains(driver).move_to_element(driver.find_element_by_link_text("README.md")).perform()
+time.sleep(4)
+driver.find_element_by_link_text("README.md").click()
+time.sleep(4)
+
+
+### Print first 300 characters #####
+
+l= driver.find_element_by_link_text("Raw").click()
+time.sleep(3)
+print(driver.find_element_by_xpath(".//pre").text[0:300])
+time.sleep(4)
+### Close the driver ###
+
+driver.close()
